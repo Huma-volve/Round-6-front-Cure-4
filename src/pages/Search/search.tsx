@@ -1,7 +1,7 @@
 import BackButton from "@/components/ui/BackButton";
 import SearchBox from "@/components/ui/searchBox";
 import { Button } from "@/components/ui/button";
-import { Filter, ChevronLeft, Clock, Star } from "lucide-react";
+import { Filter, ChevronLeft, Clock, Star, Heart } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
@@ -23,27 +23,39 @@ export default function Search() {
     "Price Low to high",
     "Price High to low",
   ];
-
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+  const token = import.meta.env.VITE_API_TOKEN;
+  const headers = { Authorization: `Bearer ${token}` };
+  const [favorites, setFavorites] = useState<Set<number>>(new Set());
   const handleSortChange = (option: string) => {
     setSelectedSort(option);
 
     let sortedDoctors = [...filteredDoctors];
 
-    if (option === "Price Low to high") {
-      sortedDoctors.sort((a, b) => a.price_per_hour - b.price_per_hour);
-    } else if (option === "Price High to low") {
-      sortedDoctors.sort((a, b) => b.price_per_hour - a.price_per_hour);
-    } else if (option === "Most recommended") {
-      sortedDoctors.sort((a, b) => b.rating - a.rating);
+    switch (option) {
+      case "Price Low to high":
+        sortedDoctors.sort(
+          (a, b) => parseFloat(a.price_per_hour) - parseFloat(b.price_per_hour)
+        );
+        break;
+      case "Price High to low":
+        sortedDoctors.sort(
+          (a, b) => parseFloat(b.price_per_hour) - parseFloat(a.price_per_hour)
+        );
+        break;
+      case "Most recommended":
+        sortedDoctors.sort(
+          (a, b) =>
+            (parseFloat(b.average_rating) || 0) -
+            (parseFloat(a.average_rating) || 0)
+        );
+        break;
     }
 
     setFilteredDoctors(sortedDoctors);
   };
-  useEffect(() => {
-    const baseUrl = import.meta.env.VITE_BASE_URL;
-    const token = import.meta.env.VITE_API_TOKEN;
-    const headers = { Authorization: `Bearer ${token}` };
 
+  useEffect(() => {
     axios.get(`${baseUrl}specialities`, { headers }).then((res) => {
       const specs = res.data?.data ?? res.data ?? [];
       setSpecialities(specs);
@@ -52,7 +64,6 @@ export default function Search() {
     axios.get(`${baseUrl}doctors`, { headers }).then((res) => {
       const docs = res.data?.data ?? res.data ?? [];
       setDoctors(docs);
-
       setFilteredDoctors(docs);
     });
   }, []);
@@ -80,29 +91,71 @@ export default function Search() {
     9: "/doctors/9.jpg",
     10: "/doctors/10.jpg",
     11: "/doctors/11.png",
+    12: "/doctors/12.png",
+    13: "/doctors/13.png",
+    14: "/doctors/14.png",
+    15: "/doctors/15.png",
+    16: "/doctors/16.webp",
+    17: "/doctors/17.webp",
+    18: "/doctors/18.webp",
+    19: "/doctors/19.webp",
+    20: "/doctors/20.webp",
+  };
+  const doctorImagesCount = 20;
+  function getDoctorImage(userId: number): string {
+    const index = (userId % doctorImagesCount) + 1;
+    return `/doctors/${index}.jpg`;
+  }
+  const Favorite = (doctorId: number) => {
+    const newFavorites = new Set(favorites);
+    if (favorites.has(doctorId)) {
+      newFavorites.delete(doctorId);
+    } else {
+      newFavorites.add(doctorId);
+    }
+    setFavorites(newFavorites);
   };
 
   const DoctorCard = ({ doctor }: { doctor: any }) => (
-    <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-200 w-full">
+    <div className="relative bg-white rounded-lg p-3 shadow-sm border border-gray-200 w-full">
+      <button
+        onClick={() => Favorite(doctor.user_id)}
+        className="absolute top-2 right-2 p-1 rounded-full bg-white shadow-sm hover:shadow-md transition-shadow"
+      >
+        <Heart
+          className={`w-4 h-4 transition-colors ${
+            favorites.has(doctor.user_id)
+              ? "fill-red-600 text-red-600"
+              : "text-gray-400 hover:text-red-400 cursor-pointer"
+          }`}
+        />
+      </button>
       <div className="flex items-start gap-3 mb-3">
         <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
-          <img
-            src={doctorImages[doctor.doctor_profile_id] || "/placeholder.jpg"}
-            alt={doctor.name}
-            className="w-full h-full object-cover"
-          />
+          {doctorImages[doctor.specialty_id] && (
+            <img
+              src={getDoctorImage(doctor.user_id)}
+              alt={doctor.name}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = "/doctors/1.jpg";
+              }}
+            />
+          )}
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-gray-900 text-sm leading-tight mb-1">
             {doctor.name}
           </h3>
           <p className="text-gray-500 text-xs mb-2">
-            {doctor.specialty_name_en} | {doctor.hospital_name}
+            {doctor.specialty_name_en || "General"} | {doctor.hospital_name}
           </p>
           <div className="flex items-center gap-3 text-xs">
             <div className="flex items-center gap-1">
               <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-              <span className="text-gray-700 font-medium">4.8</span>
+              <span className="text-gray-700 font-medium">
+                {doctor.average_rating || "4.8"}
+              </span>
             </div>
             <div className="flex items-center gap-1 text-gray-500">
               <Clock className="w-3 h-3" />
@@ -140,23 +193,32 @@ export default function Search() {
     setSearchTerm(value);
 
     if (value.trim() === "") {
+      if (activeSpec !== null) {
+        setFilteredDoctors(
+          doctors.filter((doc) => doc.specialty_id === activeSpec)
+        );
+      } else {
+        setFilteredDoctors(doctors);
+      }
       setSearchResults([]);
-      setFilteredDoctors(doctors);
-      setActiveSpec(null);
       return;
     }
 
-    const filteredSpecs = specialities.filter((spec) =>
-      spec.name_en.toLowerCase().includes(value.toLowerCase())
-    );
-
-    setSearchResults(filteredSpecs);
-
-    const filteredDocs = doctors.filter((doc) =>
-      doc.specialty_name_en.toLowerCase().includes(value.toLowerCase())
-    );
-    setFilteredDoctors(filteredDocs);
-    setActiveSpec(null);
+    axios
+      .get(`${baseUrl}doctors/search?query=${encodeURIComponent(value)}`, {
+        headers,
+      })
+      .then((res) => {
+        const searchedDocs = res.data?.data ?? res.data ?? [];
+        setFilteredDoctors(searchedDocs);
+        const filteredSpecs = specialities.filter((spec) =>
+          spec.name_en.toLowerCase().includes(value.toLowerCase())
+        );
+        setSearchResults(filteredSpecs);
+      })
+      .catch(() => {
+        setFilteredDoctors([]);
+      });
   };
 
   return (
@@ -255,18 +317,27 @@ export default function Search() {
               )}
             >
               <img
-                src={`/specialists_images/${spec.icon.split("/").pop()}`}
+                src={
+                  spec.icon
+                    ? `/${spec.icon}`
+                    : "/specialists_images/gp-icon.svg"
+                }
                 alt={spec.name_en}
                 className="w-4 h-4"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src =
+                    "/specialists_images/gp-icon.svg";
+                }}
               />
+
               <span>{spec.name_en}</span>
             </button>
           ))}
         </div>
 
         <div className="mt-6 gap-4 grid grid-cols-2">
-          {visibleDoctors.map((doctor) => (
-            <DoctorCard key={doctor.doctor_profile_id} doctor={doctor} />
+          {visibleDoctors.map((doctor, index) => (
+            <DoctorCard key={doctor.user_id + index} doctor={doctor} />
           ))}
         </div>
 
@@ -398,18 +469,27 @@ export default function Search() {
                 )}
               >
                 <img
-                  src={`/specialists_images/${spec.icon.split("/").pop()}`}
+                  src={
+                    spec.icon
+                      ? `/${spec.icon}`
+                      : "/specialists_images/gp-icon.svg"
+                  }
                   alt={spec.name_en}
                   className="w-4 h-4"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src =
+                      "/specialists_images/gp-icon.svg";
+                  }}
                 />
+
                 <span>{spec.name_en}</span>
               </button>
             ))}
           </div>
 
           <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-            {visibleDoctors.map((doctor) => (
-              <DoctorCard key={doctor.doctor_profile_id} doctor={doctor} />
+            {visibleDoctors.map((doctor, index) => (
+              <DoctorCard key={doctor.user_id} doctor={doctor} />
             ))}
           </div>
 
