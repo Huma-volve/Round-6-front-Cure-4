@@ -11,12 +11,14 @@ import PasswordManagementPage from "./pages/Profile/PasswordManagementPage";
 import PaymentMethodCard from "./pages/Profile/PaymentMethodCard";
 import AddNewCard from "./pages/Profile/AddNewCard";
 import BookingsPage from "./pages/Bookings/BookingsPage";
+import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
+          <Route path="*" element={<NotFound />}></Route>
           <Route path="/favorite" element={<FavoritePage />}></Route>
           <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
           <Route path="/FAQs" element={<FAQsPage />}></Route>
