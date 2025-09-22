@@ -1,4 +1,3 @@
-
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { z } from "zod";
@@ -49,14 +48,15 @@ const form = useForm({
 
     return (
         <header className="bg-white py-2 mb-12 px-5 fixed top-0 right-0 left-0  z-50 ">
-            <div className="flex items-center justify-between gap-5 relative">
-                                <Link to="/home">
+            <div className="grid grid-cols-3 items-center  gap-5 relative">
+              <Link to="/home" className="order-1 sm:order-none" >
                 <HeartPulse className="text-[#145DB8] w-8 h-8" />
             </Link>
-     <Form {...form} >
+    <div className="col-span-3 sm:col-auto  order-3 sm:order-none ">
+                  <Form {...form} >
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="border flex items-center rounded p-1 max-w-md w-full"
+          className="border flex items-center rounded p-1  w-full "
         >
           <Search className="w-4 h-4 mr-2" />
           <FormField
@@ -85,23 +85,22 @@ const form = useForm({
           </Button>
         </form>
       </Form>
-            <div className="flex gap-4 items-center ">
+             </div>
+            <div className="flex gap-4 place-self-end order-2 sm:order-none col-span-2 sm:col-auto">
                 <nav
                     className={`
-                        transition duration-300 ease-in-out absolute top-14 right-10  sm:top-0 sm:right-0 bg-white p-3 sm:p-0 rounded sm:static
+                        transition duration-300 ease-in-out 
                         ${isNavOpen ? " translate-x-0 block" : "translate-x-full hidden"}
                     `}
                 >
-                    <ul className="flex flex-col sm:flex-row gap-3">
+                    <ul className="flex gap-3">
                         {navLinks.map((linkObj) => (
                             <li
                                 key={linkObj.name}
-                                className="font-Georgian bg-gray-100 px-5 py-2 rounded"
+                                className="font-Georgian bg-gray-100 px-2 lg:px-5 py-2 rounded text-sm"
                             >
                                 <NavLink
-                                    className={({ isActive }) =>
-                                        isActive ? "text-blue-700" : "text-gray-900"
-                                    }
+                                    className={({ isActive }) => isActive ? "text-blue-700 hover:text-blue-700" : "text-gray-900 hover:text-blue-700"}
                                     to={linkObj.link}
                                 >
                                     {linkObj.name}
@@ -112,19 +111,19 @@ const form = useForm({
                 </nav>
 
                 <button
-                    className="p-2 bg-gray-100 rounded cursor-pointer"
+                    className=" bg-gray-100 rounded cursor-pointer px-2"
                     onClick={toggleMenuHandler}
                     aria-label="Toggle navigation menu"
                 >
-                    {isNavOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+                    {isNavOpen ? <X className="w-4" /> : <Menu className="w-4" />}
                 </button>
 
                 {/* Notifications */}
                 <button
-                    className="p-2 bg-gray-100 rounded cursor-pointer"
+                    className="bg-gray-100 rounded cursor-pointer px-2"
                     aria-label="Notifications"
                 >
-                    <Bell className="w-4 h-4" />
+                    <Bell className="w-4" />
                 </button>
 
                 <Link to="/profile">

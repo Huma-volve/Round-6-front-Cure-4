@@ -4,7 +4,7 @@ import { HeartPulse, Facebook, Youtube, Twitter, Github, Phone, Mail, MapPin } f
 export default function Footer() {
   return (
 <footer >
-  <div className="fixed bottom-0 right-0 left-0  bg-[#05162C] text-white">
+  <div className="bg-[#05162C] text-white">
   <div className="mx-auto max-w-screen-xl  px-4 py-16 sm:px-6 lg:px-8">
     <div className="md:flex lg:gap-40 justify-between">
       <div className='pb-5 md:pb-0'> 
@@ -99,7 +99,7 @@ export default function Footer() {
     </div>
 
     
-    <div className="flex justify-between ">
+    <div className="flex justify-between pt-5">
       <p >@2024 Techvio - All Right Reserved</p>
       <p>Terms & Condition | Privacy Policy</p>
   </div>
