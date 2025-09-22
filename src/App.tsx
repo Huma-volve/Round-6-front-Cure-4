@@ -1,6 +1,6 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import PrivacyPolicy from "./pages/Profile/PrivacyPolicy";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import FAQsPage from "./pages/Profile/FAQsPage";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import EditProfilePage from "./pages/Profile/EditProfilePage";
@@ -12,34 +12,93 @@ import PaymentMethodCard from "./pages/Profile/PaymentMethodCard";
 import AddNewCard from "./pages/Profile/AddNewCard";
 import BookingsPage from "./pages/Bookings/BookingsPage";
 import NotFound from "./pages/NotFound";
-const queryClient = new QueryClient();
+import Home from "./pages/Home";
+import AuthLayout from "./pages/AuthLayout";
+import Layout from "./pages/Layout";
+import Login from "./pages/Auth/Login";
+import Register from "./pages/Auth/Register";
+import AuthProvider from "./context/AuthProvider";
+import SendOTP from "./pages/Auth/SendOTP";
+import VerifyOTP from "./pages/Auth/VerifyOTP";
+import ResetPassword from "./pages/Auth/ResetPassword";
+
 function App() {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <AuthLayout />,
+      children: [
+        { index: true, element: <Login /> },
+        { path: "register", element: <Register /> },
+        { path: "sendOtp", element: <SendOTP /> },
+        { path: "verifyOtp", element: <VerifyOTP /> },
+        { path: "resetOtp", element: <ResetPassword /> },
+      ],
+    },
+    {
+      path: "/home",
+      element: <Layout />,
+      children: [{ index: true, element: <Home /> }],
+    },
+    {
+      path: "/favorite",
+      element: <FavoritePage />,
+    },
+    {
+      path: "/privacy-policy",
+      element: <PrivacyPolicy />,
+    },
+    {
+      path: "/FAQs",
+      element: <FAQsPage />,
+    },
+    {
+      path: "/",
+      element: <ProfilePage />,
+    },
+    {
+      path: "/edit-profile",
+      element: <EditProfilePage />,
+    },
+    {
+      path: "/payment",
+      element: <PaymentPage />,
+    },
+    {
+      path: "/payment-method-card",
+      element: <PaymentMethodCard />,
+    },
+    {
+      path: "/add-new-card",
+      element: <AddNewCard />,
+    },
+
+    {
+      path: "/settings",
+      element: <SettingsPage />,
+    },
+    {
+      path: "/password-management",
+      element: <PasswordManagementPage />,
+    },
+    {
+      path: "/favorites",
+      element: <FavoritePage />,
+    },
+    {
+      path: "/bookings",
+      element: <BookingsPage />,
+    },
+    {
+      path: "*",
+      element: <NotFound />,
+    },
+  ]);
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="*" element={<NotFound />}></Route>
-          <Route path="/favorite" element={<FavoritePage />}></Route>
-          <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
-          <Route path="/FAQs" element={<FAQsPage />}></Route>
-          <Route path="/" element={<ProfilePage />}></Route>
-          <Route path="/edit-profile" element={<EditProfilePage />}></Route>
-          <Route path="/payment" element={<PaymentPage />}></Route>
-          <Route
-            path="/payment-method-card"
-            element={<PaymentMethodCard />}
-          ></Route>
-          <Route path="/add-new-card" element={<AddNewCard />}></Route>
-          <Route path="/settings" element={<SettingsPage />}></Route>
-          <Route
-            path="/password-management"
-            element={<PasswordManagementPage />}
-          ></Route>
-          <Route path="/favorites" element={<FavoritePage />}></Route>
-          <Route path="/bookings" element={<BookingsPage />}></Route>
-        </Routes>
-      </BrowserRouter>
-    </QueryClientProvider>
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   );
 }
 
