@@ -33,15 +33,15 @@ export default function BookingsPage() {
     );
 
   return (
-    <div className="container mx-auto mt-10">
+    <div className="container mx-auto mt-20">
       <div className="flex gap-10 items-center">
         <BackButton onClick={() => navigate(-1)} />
-        <h1 className="text-3xl font-medium">Your Appointments</h1>
+        <h1 className="text-2xl font-medium">Your Appointments</h1>
       </div>
       <div className="flex gap-5 mt-10">
         <button
           onClick={() => setActive("all")}
-          className={` text-2xl p-3 ${
+          className={` text-xl p-3 ${
             active === "all"
               ? "bg-[#145DB8] text-[#ffffff] rounded-2xl"
               : "text-black"
@@ -51,7 +51,7 @@ export default function BookingsPage() {
         </button>
         <button
           onClick={() => setActive("upcomming")}
-          className={` text-2xl p-3 ${
+          className={` text-xl p-3 ${
             active === "upcomming"
               ? "bg-[#145DB8] text-[#ffffff] rounded-2xl"
               : "text-black"
@@ -61,7 +61,7 @@ export default function BookingsPage() {
         </button>
         <button
           onClick={() => setActive("completed")}
-          className={` text-2xl p-3 ${
+          className={` text-xl p-3 ${
             active === "completed"
               ? "bg-[#145DB8] text-[#ffffff] rounded-2xl"
               : "text-black"
@@ -71,7 +71,7 @@ export default function BookingsPage() {
         </button>
         <button
           onClick={() => setActive("past")}
-          className={` text-2xl p-3 ${
+          className={` text-xl p-3 ${
             active === "past"
               ? "bg-[#145DB8] text-[#ffffff] rounded-2xl"
               : "text-black"

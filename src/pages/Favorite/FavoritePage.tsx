@@ -11,14 +11,15 @@ export default function FavoritePage() {
   const { data, isLoading, error } = useGetFavorites();
   const { mutate } = useDeleteFavorite();
   const [active, setActive] = useState<"doctors" | "hospitals">("doctors");
-  const [isFavourite, setIsFavorite] = useState(true);
+
   console.log(data?.data?.length);
   function handleRemoveFavorite(doctorID: number) {
     mutate(doctorID);
-    setIsFavorite(!isFavourite);
+    // setIsFavorite(!isFavourite);
     console.log(doctorID);
   }
-
+  const isFavorite = (doctorID: number) =>
+    data?.data?.some((doc) => doc.doctor_profile_id === doctorID);
   if (isLoading)
     return (
       <p className="text-red-800 font-semibold align-center text-2xl">
@@ -39,10 +40,10 @@ export default function FavoritePage() {
     );
 
   return (
-    <div className="container mx-auto mt-10">
+    <div className="container mx-auto mt-20">
       <div className="flex gap-10 items-center">
         <BackButton onClick={() => navigate(-1)} />
-        <h1 className="text-3xl font-medium">Your Favorite</h1>
+        <h1 className="text-2xl font-medium">Your Favorite</h1>
       </div>
       {data?.data.length === 0 ? (
         <div className="flex flex-col items-center justify-center mt-50">
@@ -80,7 +81,7 @@ export default function FavoritePage() {
             <div className="mt-10 flex flex-col gap-10">
               {data?.data?.map((doctor) => (
                 <div
-                  key={doctor.doctor_profile_id}
+                  key={doctor.user_id}
                   className="relative flex gap-5 w-full p-3 border-2 border-[#BBC1C7] rounded-2xl"
                 >
                   <img
@@ -89,15 +90,13 @@ export default function FavoritePage() {
                     className="md:w-43 md:h-43 w-30 h-30 rounded-2xl"
                   />
                   <button
-                    onClick={() =>
-                      handleRemoveFavorite(doctor.doctor_profile_id)
-                    }
+                    onClick={() => handleRemoveFavorite(doctor.user_id)}
                     className="absolute md:top-18 right-5 top-12  bg-white p-2 rounded-full shadow-md"
                   >
                     <Heart
                       size={22}
                       className={
-                        isFavourite
+                        isFavorite(doctor.user_id)
                           ? "text-red-500 fill-red-500"
                           : "text-gray-400"
                       }

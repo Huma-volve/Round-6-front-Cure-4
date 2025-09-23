@@ -9,10 +9,10 @@ export default function EditProfilePage() {
   const { name, email, image } = location.state || {};
   console.log("location", location);
   return (
-    <div className="container mx-auto mt-10">
+    <div className="container mx-auto mt-20">
       <div className="flex gap-10 items-center">
         <BackButton onClick={() => navigate(-1)} />
-        <h1 className="text-3xl font-medium">Edit Your Profie</h1>
+        <h1 className="text-2xl font-medium">Edit Your Profie</h1>
       </div>
       <div className="flex flex-col justify-center items-center mt-10">
         <img src={image} alt="human-image" className="w-30 h-30 rounded-full" />
