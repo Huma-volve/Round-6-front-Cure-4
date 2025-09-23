@@ -1,13 +1,11 @@
 import { addFavoriteDoctor } from "@/api/Favorite";
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-
-export function useAddCard() {
-  const navigate = useNavigate();
+import toast from "react-hot-toast";
+export function useAddFavorite() {
   return useMutation({
     mutationFn: (doctorID: number) => addFavoriteDoctor(doctorID),
     onSuccess: () => {
-      navigate("/favourite");
+      toast.success("Doctor added to favorites!");
     },
   });
 }

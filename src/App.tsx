@@ -38,71 +38,74 @@ function App() {
       ],
     },
     {
-      path: "/home",
+      path: "/",
       element: <Layout />,
-      children: [{ index: true, element: <Home /> }],
-    },
-    {
-      path: "/favorite",
-      element: <FavoritePage />,
-    },
-    {
-      path: "/privacy-policy",
-      element: <PrivacyPolicy />,
-    },
-    {
-      path: "/FAQs",
-      element: <FAQsPage />,
-    },
-    {
-      path: "/profile",
-      element: <ProfilePage />,
-    },
-    {
-      path: "/edit-profile",
-      element: <EditProfilePage />,
-    },
-    {
-      path: "/payment",
-      element: <PaymentPage />,
-    },
-    {
-      path: "/payment-method-card",
-      element: <PaymentMethodCard />,
-    },
-    {
-      path: "/add-new-card",
-      element: <AddNewCard />,
-    },
+      children: [
+        { index: true, path: "home", element: <Home /> },
+        {
+          path: "bookings",
+          element: <BookingsPage />,
+        },
+        {
+          path: "favorite",
+          element: <FavoritePage />,
+        },
+        {
+          path: "privacy-policy",
+          element: <PrivacyPolicy />,
+        },
+        {
+          path: "FAQs",
+          element: <FAQsPage />,
+        },
+        {
+          path: "profile",
+          element: <ProfilePage />,
+        },
+        {
+          path: "edit-profile",
+          element: <EditProfilePage />,
+        },
+        {
+          path: "payment",
+          element: <PaymentPage />,
+        },
+        {
+          path: "payment-method-card",
+          element: <PaymentMethodCard />,
+        },
+        {
+          path: "add-new-card",
+          element: <AddNewCard />,
+        },
 
-    {
-      path: "/settings",
-      element: <SettingsPage />,
-    },
-    {
-      path: "/password-management",
-      element: <PasswordManagementPage />,
-    },
-    {
-      path: "/favorites",
-      element: <FavoritePage />,
-    },
+        {
+          path: "settings",
+          element: <SettingsPage />,
+        },
+        {
+          path: "password-management",
+          element: <PasswordManagementPage />,
+        },
+        {
+          path: "favorites",
+          element: <FavoritePage />,
+        },
 
-    {
-      path: "*",
-      element: <NotFound />,
-    },
-    {
-      path: "/bookings",
-      element: <BookingsPage />,
-    },
-    {
-      path: "/search",
-      element: <Search />,
-    },
-    {
-      path: "/map",
-      element: <Map />,
+        {
+          path: "*",
+          element: <NotFound />,
+        },
+
+        {
+          path: "search",
+          element: <Search />,
+        },
+        {
+          path: "map",
+          element: <Map />,
+        },
+      ],
     },
   ]);
 
