@@ -34,10 +34,10 @@ export default function PaymentMethodCard() {
   console.log(data);
   console.log(card_token);
   return (
-    <div className="container mx-auto mt-10">
+    <div className="container mx-auto mt-20">
       <div className="flex gap-10 items-center">
         <BackButton onClick={() => navigate(-1)} />
-        <h1 className="text-3xl font-medium">Payment Method</h1>
+        <h1 className="text-2xl font-medium">Payment Method</h1>
       </div>
       {data.data.length === 0 ? (
         <div className="flex flex-col items-center justify-center">

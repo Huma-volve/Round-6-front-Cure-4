@@ -24,10 +24,10 @@ export default function PrivacyPolicy() {
       </p>
     );
   return (
-    <div className="container mx-auto mt-10 ">
+    <div className="container mx-auto mt-20 ">
       <div className="flex gap-10 items-center">
         <BackButton onClick={() => navigate(-1)} />
-        <h1 className="text-3xl font-medium">{data.data.title}</h1>
+        <h1 className="text-2xl font-medium">{data.data.title}</h1>
       </div>
       {data && (
         <div className="mt-10">

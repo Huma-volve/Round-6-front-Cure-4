@@ -35,10 +35,10 @@ export default function FAQsPage() {
     }
   };
   return (
-    <div className="container mx-auto mt-10">
+    <div className="container mx-auto mt-20">
       <div className="flex gap-10 items-center">
         <BackButton onClick={() => navigate(-1)} />
-        <h1 className="text-3xl font-medium">FAQs</h1>
+        <h1 className="text-2xl font-medium">FAQs</h1>
       </div>
       {data.data.map((content) => (
         <div
@@ -48,12 +48,12 @@ export default function FAQsPage() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => handleOpenQuestion(content.id)}
-              className="text-2xl"
+              className="text-xl"
             >
               {isOpenIds.includes(content.id) ? "-" : "+"}
             </button>
             <div className="w-full">
-              <h3 className="text-2xl font-semibold">{content.question}</h3>
+              <h3 className="text-xl font-semibold">{content.question}</h3>
               {isOpenIds.includes(content.id) && (
                 <>
                   <hr className="w-full text-[#99A2AB] m-3 border-[#99A2AB]" />{" "}

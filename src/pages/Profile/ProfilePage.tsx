@@ -100,7 +100,7 @@ export default function ProfilePage() {
   }
   console.log(mutate);
   return (
-    <div className="container mx-auto mt-10 ">
+    <div className="container mx-auto mt-20 ">
       <div className="flex items-center gap-5 bg-[#F5F6F7] p-5 rounded-2xl mb-10">
         <img src={HumanImage} alt="img" className="w-30 h-30 rounded-full" />
         <div className="flex flex-col items-start">

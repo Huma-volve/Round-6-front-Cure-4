@@ -8,10 +8,10 @@ import ApplePay from "../../assets/logos_apple-pay.png";
 export default function PaymentPage() {
   const navigate = useNavigate();
   return (
-    <div className="container mx-auto mt-10">
+    <div className="container mx-auto mt-20">
       <div className="flex gap-10 items-center">
         <BackButton onClick={() => navigate(-1)} />
-        <h1 className="text-3xl font-medium">Credit / Debit Card</h1>
+        <h1 className="text-2xl font-medium">Credit / Debit Card</h1>
       </div>
       <div className="flex items-center gap-5 bg-[#F5F6F7] p-5 rounded-2xl mb-5 mt-10">
         <div className="flex  items-center gap-4">
@@ -45,7 +45,7 @@ export default function PaymentPage() {
           <ArrowForwardIosIcon className="text-[#99A2AB] " fontSize="medium" />
         </button>
       </div>
-      <h3 className="text-3xl font-medium mb-5 mt-10">Mobile Wallets </h3>
+      <h3 className="text-2xl font-medium mb-5 mt-10">Mobile Wallets </h3>
       <div className="flex items-center gap-5 bg-[#F5F6F7] p-5 rounded-2xl mb-5">
         <div className="flex  items-center gap-4">
           <img src={ApplePay} alt="apple-image" />

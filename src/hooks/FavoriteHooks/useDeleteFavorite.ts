@@ -21,7 +21,7 @@ export function useDeleteFavorite() {
           if (!old) return { success: true, message: "", data: [] };
           return {
             ...old,
-            data: old.data.filter((doc) => doc.doctor_profile_id !== doctorID),
+            data: old.data.filter((doc) => doc.user_id !== doctorID),
           };
         }
       );

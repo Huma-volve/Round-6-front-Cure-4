@@ -98,6 +98,7 @@ const Navbar = () => {
                 type="submit"
                 className="ml-2 bg-[#145DB8] text-white hover:bg-blue-700"
                 disabled={form.formState.isSubmitting}
+               
               >
                 Search
               </Button>
