@@ -21,6 +21,8 @@ import AuthProvider from "./context/AuthProvider";
 import SendOTP from "./pages/Auth/SendOTP";
 import VerifyOTP from "./pages/Auth/VerifyOTP";
 import ResetPassword from "./pages/Auth/ResetPassword";
+import Search from "./pages/Search/search";
+import Map from "./pages/Search/map";
 
 function App() {
   const router = createBrowserRouter([
@@ -93,6 +95,14 @@ function App() {
     {
       path: "/bookings",
       element: <BookingsPage />,
+    },
+    {
+      path: "/search",
+      element: <Search />,
+    },
+    {
+      path: "/map",
+      element: <Map />,
     },
   ]);
 
