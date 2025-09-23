@@ -1,5 +1,7 @@
 import type { BookingsResponse } from "@/types/ProfileTypes/types";
-const token = "383|mdmLLgyAnsdla62AdSTKfsfTuAvbgDnikbbDZsZD37c7c1cc";
+
+const token = localStorage.getItem("token");
+console.log(token);
 const baseURL = import.meta.env.VITE_BASE_URL;
 export async function getBookings(filter: string): Promise<BookingsResponse> {
   try {

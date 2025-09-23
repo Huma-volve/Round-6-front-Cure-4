@@ -4,7 +4,7 @@ import type {
   FavoriteResponse,
 } from "@/types/ProfileTypes/types";
 
-const token = "383|mdmLLgyAnsdla62AdSTKfsfTuAvbgDnikbbDZsZD37c7c1cc";
+const token = localStorage.getItem("token");
 const baseURL = import.meta.env.VITE_BASE_URL;
 export async function getFavoritesDoctors(): Promise<FavoriteResponse> {
   try {

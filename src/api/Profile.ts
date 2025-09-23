@@ -12,7 +12,7 @@ import type {
   ProfileResponse,
 } from "@/types/ProfileTypes/types";
 const baseURL = import.meta.env.VITE_BASE_URL;
-const token = "383|mdmLLgyAnsdla62AdSTKfsfTuAvbgDnikbbDZsZD37c7c1cc";
+const token = localStorage.getItem("token");
 export async function privacyContent(): Promise<PrivacyPolicyResponse> {
   try {
     const res = await fetch(`${baseURL}pages/privacy-policy`, {

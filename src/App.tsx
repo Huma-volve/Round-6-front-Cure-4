@@ -53,7 +53,7 @@ function App() {
       element: <FAQsPage />,
     },
     {
-      path: "/",
+      path: "/profile",
       element: <ProfilePage />,
     },
     {
@@ -85,13 +85,14 @@ function App() {
       path: "/favorites",
       element: <FavoritePage />,
     },
-    {
-      path: "/bookings",
-      element: <BookingsPage />,
-    },
+
     {
       path: "*",
       element: <NotFound />,
+    },
+    {
+      path: "/bookings",
+      element: <BookingsPage />,
     },
   ]);
 
