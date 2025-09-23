@@ -7,6 +7,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/search" element={<Search />} />
+        <Route path="/search/:query" element={<Search />} />
         <Route path="/map" element={<Map />} />
       </Routes>
     </BrowserRouter>
