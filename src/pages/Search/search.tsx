@@ -1,15 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import BackButton from "@/components/ui/BackButton";
 import SearchBox from "@/components/ui/searchBox";
 import { Button } from "@/components/ui/button";
-import { Filter, ChevronLeft } from "lucide-react";
+import { Filter, ChevronLeft, Clock, Star, Heart } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
+import { useAddFavorite } from "@/hooks/FavoriteHooks/useAddFavorite";
+import { useDeleteFavorite } from "@/hooks/FavoriteHooks/useDeleteFavorite";
+import { useGetFavorites } from "@/hooks/FavoriteHooks/useFavorite";
 import { Link, useParams } from "react-router-dom";
-import { DoctorCard } from "@/components/ui/DoctorCard";
 
-export default function search() {
+export default function Search() {
   const [gender, setGender] = useState<"male" | "female" | null>(null);
   const [doctors, setDoctors] = useState<any[]>([]);
   const [specialities, setSpecialities] = useState<any[]>([]);
@@ -27,12 +31,19 @@ export default function search() {
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const token = import.meta.env.VITE_API_TOKEN;
   const headers = { Authorization: `Bearer ${token}` };
+  const [favorites, setFavorites] = useState<Set<number>>(new Set());
+  const addFavorite = useAddFavorite();
+  const deleteFavorite = useDeleteFavorite();
+  const { data: favoriteData } = useGetFavorites();
+  const location = useLocation();
+  const path = location.pathname;
+  console.log(path);
   const { query } = useParams();
 
   const handleSortChange = (option: string) => {
     setSelectedSort(option);
 
-    let sortedDoctors = [...filteredDoctors];
+    const sortedDoctors = [...filteredDoctors];
 
     switch (option) {
       case "Price Low to high":
@@ -52,11 +63,10 @@ export default function search() {
             (parseFloat(a.average_rating) || 0)
         );
         break;
+
+        setFilteredDoctors(sortedDoctors);
     }
-
-    setFilteredDoctors(sortedDoctors);
   };
-
   useEffect(() => {
     axios.get(`${baseUrl}specialities`, { headers }).then((res) => {
       const specs = res.data?.data ?? res.data ?? [];
@@ -87,6 +97,122 @@ export default function search() {
     setActiveSpec(null);
   };
 
+  const doctorImages: Record<number, string> = {
+    1: "/doctors/1.jpg",
+    2: "/doctors/2.jpg",
+    3: "/doctors/3.jpg",
+    4: "/doctors/4.jpg",
+    5: "/doctors/5.jpg",
+    6: "/doctors/6.jpg",
+    7: "/doctors/7.jpg",
+    8: "/doctors/8.jpg",
+    9: "/doctors/9.jpg",
+    10: "/doctors/10.jpg",
+    11: "/doctors/11.png",
+    12: "/doctors/12.png",
+    13: "/doctors/13.png",
+    14: "/doctors/14.png",
+    15: "/doctors/15.png",
+    16: "/doctors/16.webp",
+    17: "/doctors/17.webp",
+    18: "/doctors/18.webp",
+    19: "/doctors/19.webp",
+    20: "/doctors/20.webp",
+  };
+  const doctorImagesCount = 20;
+  function getDoctorImage(userId: number): string {
+    const index = (userId % doctorImagesCount) + 1;
+    return `/doctors/${index}.jpg`;
+  }
+  useEffect(() => {
+    if (favoriteData?.data) {
+      setFavorites(new Set(favoriteData?.data.map((doc) => doc.user_id)));
+    }
+  }, [favoriteData]);
+
+  const Favorite = (doctorId: number) => {
+    const newFavorites = new Set(favorites);
+    if (favorites.has(doctorId)) {
+      newFavorites.delete(doctorId);
+      deleteFavorite.mutate(doctorId);
+    } else {
+      newFavorites.add(doctorId);
+      addFavorite.mutate(doctorId);
+    }
+    setFavorites(newFavorites);
+  };
+  const DoctorCard = ({ doctor }: { doctor: any }) => {
+    console.log(doctor.user_id);
+    return (
+      <div className="relative bg-white rounded-lg p-3 shadow-sm border border-gray-200 w-full">
+        <button
+          onClick={() => Favorite(doctor.user_id)}
+          className="absolute top-2 right-2 p-1 rounded-full bg-white shadow-sm hover:shadow-md transition-shadow"
+        >
+          <Heart
+            className={`w-4 h-4 transition-colors ${
+              favorites.has(doctor.user_id)
+                ? "fill-red-600 text-red-600"
+                : "text-gray-400 hover:text-red-400 cursor-pointer"
+            }`}
+          />
+        </button>
+        <div className="flex items-start gap-3 mb-3">
+          <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
+            {doctorImages[doctor.specialty_id] && (
+              <img
+                src={getDoctorImage(doctor.user_id)}
+                alt={doctor.name}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = "/doctors/1.jpg";
+                }}
+              />
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-gray-900 text-sm leading-tight mb-1">
+              {doctor.name}
+            </h3>
+            <p className="text-gray-500 text-xs mb-2">
+              {doctor.specialty_name_en || "General"} | {doctor.hospital_name}
+            </p>
+            <div className="flex items-center gap-3 text-xs">
+              <div className="flex items-center gap-1">
+                <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                <span className="text-gray-700 font-medium">
+                  {doctor.average_rating || "4.8"}
+                </span>
+              </div>
+              <div className="flex items-center gap-1 text-gray-500">
+                <Clock className="w-3 h-3" />
+                <span>
+                  {doctor.hospital_start_time} - {doctor.hospital_end_time}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-between items-center mb-3">
+          <div>
+            <span className="text-gray-600 text-xs">Price</span>
+            <span className="text-gray-400 text-xs">/hour</span>
+          </div>
+          <span className="text-red-600 font-semibold text-sm">
+            ${doctor.price_per_hour}
+          </span>
+        </div>
+
+        <Link to="/">
+          <Button className="w-full bg-blue-700 hover:bg-blue-800 text-white py-2 rounded-md font-medium text-sm h-9 cursor-pointer">
+            Book appointment
+          </Button>
+        </Link>
+      </div>
+    );
+  };
+
   const visibleDoctors = showAllDoctors
     ? filteredDoctors
     : filteredDoctors.slice(0, 6);
@@ -95,6 +221,13 @@ export default function search() {
     setSearchTerm(value);
 
     if (value.trim() === "") {
+      if (activeSpec !== null) {
+        setFilteredDoctors(
+          doctors.filter((doc) => doc.specialty_id === activeSpec)
+        );
+      } else {
+        setFilteredDoctors(doctors);
+      }
       if (activeSpec !== null) {
         setFilteredDoctors(
           doctors.filter((doc) => doc.specialty_id === activeSpec)
@@ -113,6 +246,21 @@ export default function search() {
       .then((res) => {
         const searchedDocs = res.data?.data ?? res.data ?? [];
         setFilteredDoctors(searchedDocs);
+        const filteredSpecs = specialities.filter((spec) =>
+          spec.name_en.toLowerCase().includes(value.toLowerCase())
+        );
+        setSearchResults(filteredSpecs);
+      })
+      .catch(() => {
+        setFilteredDoctors([]);
+      });
+    axios
+      .get(`${baseUrl}doctors/search?query=${encodeURIComponent(value)}`, {
+        headers,
+      })
+      .then((res) => {
+        const searchedDocs = res.data?.data ?? res.data ?? [];
+        setFilteredDoctors(searchedDocs);
         setSearchResults(searchedDocs);
       })
       .catch(() => {
@@ -122,7 +270,8 @@ export default function search() {
   };
 
   return (
-    <div className="px-4 sm:px-6 lg:px-10 mt-5 max-w-7xl mx-auto">
+    //  <div className="container mx-auto mt-20">
+    <div className="px-4 sm:px-6 lg:px-10 mt-20 max-w-7xl mx-auto">
       <div className="relative flex items-center justify-between md:justify-start md:gap-10">
         <BackButton />
         <h1 className="text-lg sm:text-xl md:text-2xl font-serif absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 md:left-auto">
@@ -406,5 +555,6 @@ export default function search() {
         </div>
       </div>
     </div>
+    //  </div>
   );
 }
