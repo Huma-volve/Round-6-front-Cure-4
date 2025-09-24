@@ -10,9 +10,6 @@ import {
     Box,
     Typography
 } from "@mui/material";
-import CreditCardIcon from "@mui/icons-material/CreditCard";
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet"; // PayPal
-import AppleIcon from "@mui/icons-material/Apple"; // Apple Pay
 import { useState } from "react";
 
 
@@ -155,7 +152,7 @@ export default function PaymentPopup({ open, onClose, onPay }: PaymentPopupProps
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => {onPay(method)}}
+                    onClick={() => { onPay(method) }}
                 >
                     Pay
                 </Button>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { baseUrl } from "../../api/apiLinks"
 import avatar from "../../assets/avatar.png"
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
