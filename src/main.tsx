@@ -6,19 +6,14 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import 'leaflet/dist/leaflet.css';
 
 
-
+// localStorage.setItem("token", "478|jH6rBFlrlGXflW6hvqm0jTWFtVT9BLVN0o5PP6JPaba9e8e1");
 
 const queryClient = new QueryClient();
 
-localStorage.setItem("token", "478|jH6rBFlrlGXflW6hvqm0jTWFtVT9BLVN0o5PP6JPaba9e8e1");
-
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-
       <App />
-
     </QueryClientProvider>
-
-  </StrictMode>,
-)
+  </StrictMode>
+);
