@@ -54,7 +54,7 @@ export default function Review() {
             if (items.length > 0) {
                 const avg = items.reduce((s, r) => s + r.rating, 0) / items.length;
                 setAverageRating(avg);
-                localStorage.setItem("rating", avg.toFixed(1)); 
+                localStorage.setItem("rating", avg.toFixed(1));
             }
 
         }

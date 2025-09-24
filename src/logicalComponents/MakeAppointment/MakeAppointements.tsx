@@ -1,95 +1,34 @@
 
 import { useEffect, useState } from "react";
-import { baseUrl } from "../../api/apiLinks"
+import { fetchAvailableSlots, bookAppointment } from "../../api/appointment";
 import CheckoutPopup from "./CheckoutPopup";
 
 export default function MakeAppointment() {
-
     const [availableSlots, setAvailableSlots] = useState<Record<string, string[]> | null>(null);
-
     const [openPayment, setOpenPayment] = useState(false);
-
-    const token = localStorage.getItem("token");
-
-    useEffect(() => {
-        fetchAvailableSlots("1")
-    }, [])
-
-    const fetchAvailableSlots = async (doctorId: string) => {
-
-        try {
-            console.log("Fetching:", `http://round5-online-booking-with-doctor-api.huma-volve.com/api/doctors/${doctorId}/available-slots`);
-
-            const res = await fetch(`${baseUrl}doctors/${doctorId}/available-slots`, {
-                method: "GET",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            console.log("Token in storage:", localStorage.getItem("token"));
-
-            // console.log("Fetching:", `${baseUrl}doctors/${doctorId}/available-slots`);
-
-            const data = await res.json();
-
-            // transform array into object grouped by date
-            const grouped: Record<string, string[]> = {};
-            data.available_slots.forEach((slot: { date: string; time: string }) => {
-                if (!grouped[slot.date]) {
-                    grouped[slot.date] = [];
-                }
-                grouped[slot.date].push(slot.time);
-            });
-
-            setAvailableSlots(grouped);
-            console.log("Grouped slots:", grouped);
-            console.log("AvailableSlots", availableSlots);
-            // console.log("Raw response:", data.available_slots);
-        }
-        catch (error) {
-            console.error("No slots are available", error)
-        }
-    }
-
-    const handleBooking = async (doctorId: string) => {
-        try {
-            const res = await fetch(`${baseUrl}appointments`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
-                    Authorization:
-                        `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                    doctor_id: doctorId,
-                    date: selectedDate,
-                    time: selectedTime,
-                }),
-
-            })
-
-            const data = await res.json();
-            console.log("Booking response:", data);
-
-            if (res.ok) {
-                alert("Booking successful!");
-            } else {
-                alert(`Booking failed: ${data.message || "Unknown error"}`);
-            }
-
-        }
-        catch (error) {
-            console.log(error)
-        }
-
-    }
-
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
+
+    useEffect(() => {
+        async function loadSlots() {
+            const slots = await fetchAvailableSlots("1");
+            setAvailableSlots(slots);
+        }
+        loadSlots();
+    }, []);
+
+    const handleBooking = async () => {
+        if (!selectedDate || !selectedTime) return;
+
+        try {
+            const data = await bookAppointment("1", selectedDate, selectedTime);
+            alert("Booking successful!");
+            console.log("Booking response:", data);
+        } catch (error: any) {
+            alert(`Booking failed: ${error.message}`);
+        }
+    };
+
 
 
     return (
@@ -146,7 +85,7 @@ export default function MakeAppointment() {
             <button
                 disabled={!selectedDate || !selectedTime}
                 onClick={() => {
-                    handleBooking("1");
+                    handleBooking();
                     setOpenPayment(true)
                 }
                 }

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import { baseUrl } from "../../api/apiLinks"
 import avatar from "../../assets/avatar.png"
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -9,9 +8,11 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import GradeIcon from '@mui/icons-material/Grade';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import PaidIcon from '@mui/icons-material/Paid';
+import { fetchDoctorData } from "../../api/appointment";
 
 export default function DoctorProfile() {
 
+    const rating = localStorage.getItem("rating");
 
     // maaaaap
     const DefaultIcon = L.icon({
@@ -21,48 +22,20 @@ export default function DoctorProfile() {
     L.Marker.prototype.options.icon = DefaultIcon;
 
     // doctors / 1
-
-    const [doctor, setDoctor] = useState<any>(null);
-
-    const token = localStorage.getItem("token");
-    const rating = localStorage.getItem("rating");
-    const [hourRate, setHourRate] = useState<number | null>(null);
-
+    const [doctor, setDoctor] = useState<doctor | null>(null);
 
     useEffect(() => {
-        fetchDoctorData("1")
-    }, [])
-
-    const fetchDoctorData = async (doctorId: string) => {
-
-
-
-        try {
-            console.log("Fetching:", `http://round5-online-booking-with-doctor-api.huma-volve.com/api/doctors/${doctorId}`);
-
-            const res = await fetch(`${baseUrl}doctors/${doctorId}`, {
-                method: "GET",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            const data = await res.json();
-            setDoctor(data.data);
-            setHourRate(data.data.price_per_hour);
-            localStorage.setItem("hourRate", hourRate ? hourRate.toString() : "100");
-
+        async function loadDoctor() {
+            const doctorData = await fetchDoctorData("1");
+            if (doctorData) {
+                setDoctor(doctorData);
+                localStorage.setItem("hourRate", doctorData.price_per_hour?.toString() ?? "100");
+            }
         }
-        catch (error) {
-            console.error("Doctor data is not available", error)
-        }
-    }
+        loadDoctor();
+    }, []);
 
-    if (!doctor) {
-        return <p className="p-4">Loading doctor profile...</p>;
-    }
+    if (!doctor) return <p className="p-4">Loading doctor profile...</p>;
 
 
     return (
