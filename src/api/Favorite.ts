@@ -8,7 +8,7 @@ const token = localStorage.getItem("token");
 const baseURL = import.meta.env.VITE_BASE_URL;
 export async function getFavoritesDoctors(): Promise<FavoriteResponse> {
   try {
-    const res = await fetch(`${baseURL}favourites/doctors`, {
+    const res = await fetch(`${baseURL}Customer/Favourites/GetAllFavourites`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

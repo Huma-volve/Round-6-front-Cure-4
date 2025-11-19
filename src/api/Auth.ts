@@ -15,7 +15,7 @@ const token = localStorage.getItem("token");
 export const registerPost = (
   userdata: RegisterData
 ): Promise<RegisterResponse> => {
-  return axios.post(`${baseURL}register`, userdata, {
+  return axios.post(`${baseURL}Identity/Accounts/Register`, userdata, {
     headers: {
       "Content-Type": "application/json",
     },
