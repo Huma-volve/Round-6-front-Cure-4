@@ -1,4 +1,4 @@
-import Appointment from "./pages/Appointment/Appointment"
+import Appointment from "./pages/Appointment/Appointment";
 import Layout from "./logicalComponents/Layout/Layout";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import PrivacyPolicy from "./pages/Profile/PrivacyPolicy";
@@ -26,6 +26,9 @@ import ResetPassword from "./pages/Auth/ResetPassword";
 
 import Map from "./pages/Search/map";
 import Search from "./pages/Search/search";
+import HomePage from "./pages/Home/HomePage";
+import ContactPage from "./pages/Contact/ContactPage";
+import NotificationsPage from "./pages/Notifications/NotificationsPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -111,6 +114,18 @@ function App() {
         {
           path: "appointment",
           element: <Appointment />,
+        },
+        {
+          path: "/",
+          element: <HomePage />,
+        },
+        {
+          path: "contact",
+          element: <ContactPage />,
+        },
+        {
+          path: "notifications",
+          element: <NotificationsPage />,
         },
       ],
     },
