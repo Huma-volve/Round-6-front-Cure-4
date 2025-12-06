@@ -22,7 +22,7 @@ export default function PaymentPage() {
           className="ml-auto"
           onClick={() =>
             navigate("/payment-method-card", {
-              state: { card_token: "tok_visa" },
+              state: { brand: "VISA" },
             })
           }
         >
@@ -38,7 +38,7 @@ export default function PaymentPage() {
           className="ml-auto"
           onClick={() =>
             navigate("/payment-method-card", {
-              state: { card_token: "tok_mastercard" },
+              state: { brand: "MASTERCARD" },
             })
           }
         >

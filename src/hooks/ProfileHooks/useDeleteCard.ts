@@ -1,5 +1,5 @@
 import { deleteCard } from "@/api/Profile";
-import type { AllCardsResponse } from "@/types/ProfileTypes/types";
+import type { AllCardsResponse } from "@/types/profileTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useDeleteCard() {

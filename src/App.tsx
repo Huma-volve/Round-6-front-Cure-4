@@ -1,6 +1,7 @@
 import Appointment from "./pages/Appointment/Appointment";
 import Layout from "./logicalComponents/Layout/Layout";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import PrivacyPolicy from "./pages/Profile/PrivacyPolicy";
 
 import FAQsPage from "./pages/Profile/FAQsPage";
@@ -14,7 +15,6 @@ import PaymentMethodCard from "./pages/Profile/PaymentMethodCard";
 import AddNewCard from "./pages/Profile/AddNewCard";
 import BookingsPage from "./pages/Bookings/BookingsPage";
 import NotFound from "./pages/NotFound";
-import Home from "./pages/Home";
 import AuthLayout from "./pages/AuthLayout";
 // import Layout from "./pages/Layout";
 import Login from "./pages/Auth/Login";
@@ -47,7 +47,7 @@ function App() {
       path: "/",
       element: <Layout />,
       children: [
-        { index: true, path: "home", element: <Home /> },
+        { index: true, path: "home", element: <HomePage /> },
         {
           path: "bookings",
           element: <BookingsPage />,
@@ -116,10 +116,6 @@ function App() {
           element: <Appointment />,
         },
         {
-          path: "/",
-          element: <HomePage />,
-        },
-        {
           path: "contact",
           element: <ContactPage />,
         },
@@ -134,6 +130,24 @@ function App() {
   return (
     <AuthProvider>
       <RouterProvider router={router} />
+      <Toaster
+        position="top-center"
+        gutter={12}
+        containerStyle={{ margin: "8px" }}
+        toastOptions={{
+          success: {
+            duration: 3000,
+          },
+          error: { duration: 5000 },
+          style: {
+            fontSize: "16px",
+            maxWidth: "500px",
+            padding: "16px 24px",
+            backgroundColor: "var(--color-grey-0)",
+            color: "var(--color-grey-700)",
+          },
+        }}
+      />
     </AuthProvider>
   );
 }

@@ -9,8 +9,8 @@ import { useDeleteCard } from "@/hooks/ProfileHooks/useDeleteCard";
 export default function PaymentMethodCard() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { card_token } = location.state || "";
-  console.log(card_token);
+  const { brand } = location.state || "";
+  console.log(brand);
   const { data, isLoading, error } = useAllCards();
   const { mutate } = useDeleteCard();
   if (isLoading)
@@ -32,29 +32,29 @@ export default function PaymentMethodCard() {
       </p>
     );
   console.log(data);
-  console.log(card_token);
+  console.log(brand);
   return (
-    <div className="container mx-auto mt-20 px-20">
-      <div className="flex gap-10 items-center">
+    <div className="container mx-auto  px-10">
+      <div className="flex gap-10 items-center mb-10">
         <BackButton onClick={() => navigate(-1)} />
         <h1 className="text-2xl font-medium">Payment Method</h1>
       </div>
       {data.data.length === 0 ? (
         <div className="flex flex-col items-center justify-center">
           <img src={CardsImage} alt="cards-image" />
-          <h3 className="text-2xl font-medium">Nothing to display here!</h3>
-          <p className="text-xl font-medium text-[#6D7379]">
+          <h3 className="text-xl font-semibold">Nothing to display here!</h3>
+          <p className="text-lg font-medium text-[#6D7379]">
             Add your cards to make payment easier
           </p>
         </div>
       ) : (
-        <div>
+        <div className="flex flex-col justify-center items-center">
           {data.data.map((card) => (
             <div
               key={card.id}
-              className="flex items-center gap-2 border-1 mt-5 p-2 rounded-2xl bg-[#F5F6F7]"
+              className=" w-full sm:w-3/4 flex  items-center gap-2 border-1 mt-5 p-2 rounded-2xl bg-[#F5F6F7]"
             >
-              <img src={card.brand === "mastercard" ? MasterCard : Visa} />
+              <img src={card.brand === "MASTERCARD" ? MasterCard : Visa} />
               <p>{card.brand}</p>
               <button className="ml-auto" onClick={() => mutate(card.id)}>
                 <DeleteIcon className="text-[#6D7379] " />
@@ -63,14 +63,14 @@ export default function PaymentMethodCard() {
           ))}
         </div>
       )}
-      <button
-        onClick={() =>
-          navigate("/add-new-card", { state: { card_token: card_token } })
-        }
-        className="w-full bg-[#145DB8] h-12 rounded-xl mt-10 mb-10 text-[#FFFFFF] text-2xl"
-      >
-        + Add Card
-      </button>
+      <div className="flex items-center justify-center">
+        <button
+          onClick={() => navigate("/add-new-card", { state: { brand: brand } })}
+          className="w-full sm:w-3/4 bg-[#145DB8] h-12 rounded-xl mt-10 mb-10 text-[#FFFFFF] text-xl"
+        >
+          + Add Card
+        </button>
+      </div>
     </div>
   );
 }

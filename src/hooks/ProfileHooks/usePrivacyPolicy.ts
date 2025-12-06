@@ -1,5 +1,5 @@
 import { privacyContent } from "@/api/Profile";
-import type { PrivacyPolicyResponse } from "@/types/ProfileTypes/types";
+import type { PrivacyPolicyResponse } from "@/types/profileTypes";
 import { useQuery } from "@tanstack/react-query";
 export function usePrivacyPolicy() {
   return useQuery<PrivacyPolicyResponse, Error>({
