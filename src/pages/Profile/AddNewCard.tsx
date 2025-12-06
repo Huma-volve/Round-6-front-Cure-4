@@ -9,7 +9,7 @@ export default function AddNewCard() {
   const { brand } = location.state as { brand: string };
   const { mutate } = useAddCard();
   return (
-    <div className="container mx-auto mt-20">
+    <div className="container mx-auto mt-20 px-10">
       <div className="flex gap-10 items-center">
         <BackButton onClick={() => navigate(-1)} />
         <h1 className="text-2xl font-medium">Add New Card</h1>

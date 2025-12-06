@@ -145,16 +145,18 @@ export async function addNewCard(
     throw error instanceof Error ? error : new Error("Unexpected post error");
   }
 }
-export async function deleteCard(cardID: number): Promise<DeleteCardResponse> {
+export async function deleteCard(
+  paymentMethodId: number
+): Promise<DeleteCardResponse> {
   try {
-    const res = await fetch(`${baseURL}cards/${cardID}`, {
+    const res = await fetch(`${baseURL}payment-methods/${paymentMethodId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(cardID);
+    console.log(paymentMethodId);
     if (!res.ok) {
       const error = await res.json();
       throw new Error(error.message || "Delete failed");

@@ -73,6 +73,7 @@ export default function AddCardForm({ brand, mutate }: any) {
           validateOnChange={true}
           onSubmit={(values) => {
             console.log(values);
+
             const payload = {
               brand,
               cardholder_name: values.cardholder_name,
@@ -87,8 +88,6 @@ export default function AddCardForm({ brand, mutate }: any) {
           }}
         >
           {({ errors, touched, isValid, isSubmitting }) => {
-            // setCardNumber(values.card_number);
-            // setCardHolderName(values.cardholder_name);
             return (
               <Form className="flex flex-col gap-8 justify-center items-center ">
                 <div className=" w-full ">
@@ -100,6 +99,10 @@ export default function AddCardForm({ brand, mutate }: any) {
                         type="text"
                         placeholder="Your Card Name"
                         className="pl-8 "
+                        onChange={(e) => {
+                          field.onChange(e);
+                          setCardHolderName(e.target.value);
+                        }}
                         {...field}
                       />
                     )}
@@ -121,12 +124,16 @@ export default function AddCardForm({ brand, mutate }: any) {
                           type={visible ? "text" : "password"}
                           placeholder="Your Card Number"
                           className="pl-8 "
+                          onChange={(e) => {
+                            field.onChange(e);
+                            setCardNumber(e.target.value);
+                          }}
                           {...field}
                         />
                         <button
                           type="button"
                           onClick={() => setVisible(!visible)}
-                          className="absolute md:left-310 top-1.5 left-95 "
+                          className="absolute md:left-120 top-1.5 left-75 "
                         >
                           {visible ? <EyeOff /> : <Eye />}
                         </button>
@@ -140,7 +147,7 @@ export default function AddCardForm({ brand, mutate }: any) {
                     </p>
                   )}
                 </div>
-                <div className="flex justify-between items-center gap-5">
+                <div className="flex justify-between items-center gap-2">
                   <div className=" w-full">
                     <Label className="mb-2">Expiry Date</Label>
                     <div className="flex gap-2">
@@ -211,7 +218,7 @@ export default function AddCardForm({ brand, mutate }: any) {
                     )}
                   </div>
                   <div className="w-full">
-                    <Label className="mb-2">Is Default?</Label>
+                    <Label className="mb-2">Default?</Label>
                     <Field name="is_default">
                       {({ field, form }: any) => (
                         <Select

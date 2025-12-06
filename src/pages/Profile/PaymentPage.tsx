@@ -8,7 +8,7 @@ import ApplePay from "../../assets/logos_apple-pay.png";
 export default function PaymentPage() {
   const navigate = useNavigate();
   return (
-    <div className="container mx-auto mt-20 px-20">
+    <div className="container mx-auto mt-10 px-10">
       <div className="flex gap-10 items-center">
         <BackButton onClick={() => navigate(-1)} />
         <h1 className="text-2xl font-medium">Credit / Debit Card</h1>
