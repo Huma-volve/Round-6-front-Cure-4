@@ -6,11 +6,9 @@ export interface UserInfo {
   
 }
 
-
 export interface AuthContextType {
   userInfo: UserInfo | null; 
 }
-
 
 export interface RegisterData {
   name: string;  
@@ -33,6 +31,10 @@ export interface LoginData {
 
 export interface LoginResponse {
   user: UserInfo
+}
+
+export interface Query {
+  query: string
 }
 
 export interface ResetOTP { 
