@@ -13,6 +13,4 @@ export const useRegister = () => {
         navigate('/')
     }
  })
-  
-
 };
