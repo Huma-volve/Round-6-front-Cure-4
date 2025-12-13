@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { HeartPulse } from 'lucide-react';
-import { Link } from "react-router"; 
+import { HeartPulse } from "lucide-react";
+import { Link } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -35,13 +35,12 @@ const formSchema = z.object({
 
 export default function SendOTP() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [otpCode, setOtpCode] = useState('');
+  const [otpCode, setOtpCode] = useState("1234");
   const { sendOtp } = useForgetPassword();
 
   useEffect(() => {
-    if (sendOtp.isSuccess && sendOtp.data?.data?.data?.note) {
-      const newOtpCode = sendOtp.data.data.data.note.replace(/[^0-9]/g, '');
-      setOtpCode(newOtpCode);
+    if (sendOtp.isSuccess) {
+      console.log(sendOtp.data && sendOtp.data?.status);
       setIsDialogOpen(true);
     } else if (sendOtp.isError) {
       setIsDialogOpen(false);
@@ -63,7 +62,7 @@ export default function SendOTP() {
     <div className="lg:relative">
       <div className="container mx-auto">
         <HeartPulse className="text-[#145DB8] w-8 h-8 absolute top-10 left-22 lg:top-[-40px] lg:left-16" />
-        <div className="lg:max-w-1/2 mt-20 mx-auto px-5 lg:px-0"> {/* Adjusted to valid Tailwind class */}
+        <div className="lg:max-w-1/2 mt-20 mx-auto px-5 lg:px-0">
           <div className="text-center pb-8">
             <h1 className="text-3xl">Forget Your Password ?</h1>
             <p className="text-[#6D7379] text-xs pt-2">
@@ -85,14 +84,29 @@ export default function SendOTP() {
                   </FormItem>
                 )}
               />
-              {sendOtp.isError && <p style={{ color: 'red' }}>{sendOtp.error.response?.data?.message}</p>}
-              <Button type="submit" className="text-white bg-[#145DB8] w-full cursor-pointer hover:bg-blue-700 mb-8">
-                {sendOtp.isLoading ? <span className="animate-spin bg-white w-4 h-4 inline-block"></span> : 'Send'}
+              {sendOtp.isError && (
+                <p style={{ color: "red" }}>
+                  {sendOtp.error.response?.data?.message}
+                </p>
+              )}
+              <Button
+                type="submit"
+                disabled={sendOtp.isPending}
+                className="text-white bg-[#145DB8] w-full cursor-pointer hover:bg-blue-700 mb-8"
+              >
+                {sendOtp.isPending ? (
+                  <span className="animate-spin border-2 border-white border-t-transparent rounded-full w-4 h-4 inline-block"></span>
+                ) : (
+                  "Send"
+                )}
               </Button>
             </form>
           </Form>
-          <Link to="/register" className="text-[#145DB8] text-center cursor-pointer font-medium block">
-            create new account
+          <Link
+            to="/login"
+            className="text-[#6D7379] text-center cursor-pointer font-medium block"
+          >
+            Back To Sign in
           </Link>
         </div>
       </div>
@@ -102,12 +116,14 @@ export default function SendOTP() {
           <AlertDialogHeader>
             <AlertDialogTitle>Your verification code is</AlertDialogTitle>
             <AlertDialogDescription>
-              <span className="text-blue-600 text-2xl font-semibold">{otpCode}</span>
+              <span className="text-blue-600 text-2xl font-semibold">
+                {otpCode}
+              </span>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <Link to="/verifyOtp" className="w-full"> 
+            <Link to="/verifyOtp" className="w-full">
               <AlertDialogAction>Continue</AlertDialogAction>
             </Link>
           </AlertDialogFooter>
