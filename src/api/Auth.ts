@@ -6,16 +6,14 @@ import type {
   LoginResponse,
   ResetOTP,
 } from "@/types/types";
-const baseURL = import.meta.env.VITE_BASE_URL;
-// const url =
-//   "https://round5-online-booking-with-doctor-api.digital-vision-solutions.com/api";
 
+const baseURL = import.meta.env.VITE_BASE_URL;
 const token = localStorage.getItem("token");
 
 export const registerPost = (
   userdata: RegisterData
 ): Promise<RegisterResponse> => {
-  return axios.post(`${baseURL}Identity/Accounts/Register`, userdata, {
+  return axios.post(`${baseURL}register`, userdata, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -31,15 +29,18 @@ export const loginUser = (userdata: LoginData): Promise<LoginResponse> => {
 };
 
 export const sendOTPToUser = (userdata: ResetOTP) => {
-  return axios.post(`${baseURL}send-reset-otp`, userdata, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  return axios.post(
+    `${baseURL}forgot-password/send-otp?email=${userdata.email}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
 };
 
 export const verifyUserOTP = (userdata: ResetOTP) => {
-  return axios.post(`${baseURL}verify-otp`, userdata, {
+  return axios.post(`${baseURL}forgot-password/verify-otp`, userdata, {
     headers: {
       token,
     },
@@ -47,7 +48,7 @@ export const verifyUserOTP = (userdata: ResetOTP) => {
 };
 
 export const resetPassword = (userdata: ResetOTP) => {
-  return axios.post(`${baseURL}reset-password`, userdata, {
+  return axios.post(`${baseURL}forgot-password/reset`, userdata, {
     headers: {
       token,
     },

@@ -26,9 +26,17 @@ const formSchema = z
     email: z.string().email({
       message: "Email is required",
     }),
-    password: z.string().min(8, {
-      message: "Password must be at least 8 characters",
+    mobile: z.string().regex(/^(010|011|012|015)[0-9]{8}$/, {
+      message:
+        "Invalid mobile number. Must start with 015|010|012|011 and be 10 digits.",
     }),
+    password: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters" })
+      .regex(/^[A-Z](?=.*@).{7,}$/, {
+        message:
+          "Password must start with a capital letter and contain @ character",
+      }),
     password_confirmation: z.string(),
   })
   .refine(
@@ -42,7 +50,7 @@ const formSchema = z
   );
 
 export default function Register() {
-  const { mutate, isLoading, isError, error } = useRegister();
+  const { mutate, isError, error, isPending } = useRegister();
   console.log(error);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,6 +59,7 @@ export default function Register() {
       email: "",
       password: "",
       password_confirmation: "",
+      mobile: "",
     },
   });
 
@@ -99,6 +108,19 @@ export default function Register() {
               />
               <FormField
                 control={form.control}
+                name="mobile"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Phone" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="password"
                 render={({ field }) => (
                   <FormItem>
@@ -136,9 +158,10 @@ export default function Register() {
               )}
               <Button
                 type="submit"
+                disabled={isPending}
                 className="text-white bg-[#145DB8] w-full cursor-pointer hover:bg-blue-700"
               >
-                {isLoading ? (
+                {isPending ? (
                   <span className="animate-spin bg-white w-4 h-4 inline-block"></span>
                 ) : (
                   "Submit"
