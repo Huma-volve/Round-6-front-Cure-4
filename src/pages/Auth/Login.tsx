@@ -28,7 +28,7 @@ const formSchema = z.object({
 });
 
 export default function Login() {
-  const { mutate, isLoading, isError, error, data } = useLogin();
+  const { mutate, isPending, isError, error } = useLogin();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -86,17 +86,18 @@ export default function Login() {
                 )}
               />
               {isError && (
-                <p style={{ color: "red" }}>{error.response?.data?.message}</p>
+                <p style={{ color: "red" }}>{error?.response?.data?.error}</p>
               )}
               <Link to="/sendOtp" className="text-[#145DB8] cursor-pointer">
                 Forget the password?
               </Link>
               <Button
                 type="submit"
+                disabled={isPending}
                 className="text-white bg-[#145DB8] w-full cursor-pointer hover:bg-blue-700 my-8"
               >
-                {isLoading ? (
-                  <span className="animate-spin bg-white w-4 h-4 inline-block"></span>
+                {isPending ? (
+                  <span className="animate-spin border-2 border-white border-t-transparent rounded-full w-4 h-4 inline-block"></span>
                 ) : (
                   "Submit"
                 )}
@@ -112,10 +113,10 @@ export default function Login() {
         </div>
       </div>
       <div className="lg:absolute hidden lg:block top-[-135px] right-0">
-        <img src={wave2} alt="" />
+        <img src={wave2} alt="wave image" />
       </div>
       <div className="lg:absolute hidden lg:block top-[-135px] right-0">
-        <img src={waveBorder} alt="" />
+        <img src={waveBorder} alt="background image" />
       </div>
     </div>
   );
