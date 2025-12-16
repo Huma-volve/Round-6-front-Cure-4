@@ -9,7 +9,7 @@ export default function EditProfilePage() {
   const { name, email, image } = location.state || {};
   console.log("location", location);
   return (
-    <div className="container mx-auto mt-20 px-20">
+    <div className="container mx-auto mt-10 px-10">
       <div className="flex gap-10 items-center">
         <BackButton onClick={() => navigate(-1)} />
         <h1 className="text-2xl font-medium">Edit Your Profie</h1>

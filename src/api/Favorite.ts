@@ -2,20 +2,20 @@ import type {
   AddFavoriteResponse,
   DeleteFavoriteResponse,
   FavoriteResponse,
-} from "@/types/ProfileTypes/types";
+} from "@/types/favoriteTypes";
 
-const token = localStorage.getItem("token");
+// const token = localStorage.getItem("token");
+const token = `125|Y8xzWNMfvCbjNksQh7NIEYLp3PdGgA3DOJWKFTWr23a6da5c`;
 const baseURL = import.meta.env.VITE_BASE_URL;
 export async function getFavoritesDoctors(): Promise<FavoriteResponse> {
   try {
-    const res = await fetch(`${baseURL}Customer/Favourites/GetAllFavourites`, {
+    const res = await fetch(`${baseURL}favorites`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
-
     if (!res.ok) {
       const error = await res.json();
       throw new Error(error.message || "Fetch failed");
@@ -31,14 +31,14 @@ export async function deleteFavoritesDoctors(
   doctorID: number
 ): Promise<DeleteFavoriteResponse> {
   try {
-    const res = await fetch(`${baseURL}favourites/doctors/${doctorID}`, {
-      method: "DELETE",
+    const res = await fetch(`${baseURL}favorites/toggle/${doctorID}`, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(doctorID);
+
     if (!res.ok) {
       const error = await res.json();
       throw new Error(error.message || "Delete failed");
@@ -55,9 +55,10 @@ export async function addFavoriteDoctor(
   doctorID: number
 ): Promise<AddFavoriteResponse> {
   try {
-    const res = await fetch(`${baseURL}favourites/doctors/${doctorID}`, {
+    const res = await fetch(`${baseURL}favorites/toggle/${doctorID}`, {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });

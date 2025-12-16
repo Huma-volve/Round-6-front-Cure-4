@@ -1,12 +1,12 @@
 import Visa from "../../assets/brandico_visa.png";
 import MasterCard from "../../assets/logos_mastercard.png";
 type CardPreviewData = {
-  card_token: string;
+  brand: string;
   cardNumber: string;
   cardHolderName: string;
 };
 export const CardPreview = ({
-  card_token,
+  brand,
   cardNumber,
   cardHolderName,
 }: CardPreviewData) => {
@@ -15,10 +15,10 @@ export const CardPreview = ({
       <div className="flex justify-between text-[#ffffff] ">
         <img
           className="w-10 h-10"
-          src={card_token === "tok_mastercard" ? MasterCard : Visa}
+          src={brand === "MASTERCARD" ? MasterCard : Visa}
         />
         <h5 className="text-3xl font-bold">
-          {card_token === "tok_mastercard" ? "MasterCard" : "Visa"}
+          {brand === "MASTERCARD" ? "MasterCard" : "Visa"}
         </h5>
       </div>
       <div className="flex flex-col justify-center">

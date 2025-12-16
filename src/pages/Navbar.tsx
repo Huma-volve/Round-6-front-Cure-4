@@ -38,7 +38,7 @@ const Navbar = () => {
   useEffect(() => {
     async function getDoctors() {
       try {
-        let response = await axios.get(
+        const response = await axios.get(
           `https://round5-online-booking-with-doctor-api.huma-volve.com/api/doctors`,
           { headers: { token } }
         );

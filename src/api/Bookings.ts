@@ -1,12 +1,14 @@
-import type { BookingsResponse } from "@/types/ProfileTypes/types";
+import type { BookingsResponse } from "@/types/appointmentTypes";
 
-const token = localStorage.getItem("token");
+// const token = localStorage.getItem("token");
+const token = "125|Y8xzWNMfvCbjNksQh7NIEYLp3PdGgA3DOJWKFTWr23a6da5c";
 console.log(token);
 const baseURL = import.meta.env.VITE_BASE_URL;
 export async function getBookings(filter: string): Promise<BookingsResponse> {
   try {
     const url =
-      filter === "all" ? "my-bookings" : `my-bookings?filter=${filter}`;
+      filter === "all" ? "patient/bookings" : `patient/bookings?${filter}`;
+    //${baseURL}patient/bookings?${filter}
     const res = await fetch(`${baseURL}${url}`, {
       method: "GET",
       headers: {

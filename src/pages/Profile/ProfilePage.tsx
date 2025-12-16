@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import HumanImage from "../../assets/user-vector.avif";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   BanknoteIcon,
   BellIcon,
@@ -12,7 +13,7 @@ import {
 } from "lucide-react";
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
 import Switch from "@mui/material/Switch";
-import { useProfile } from "@/hooks/ProfileHooks/useProfile";
+// import { useProfile } from "@/hooks/ProfileHooks/useProfile";
 import { useLogout } from "@/hooks/ProfileHooks/useLogout";
 import {
   AlertDialog,
@@ -68,32 +69,16 @@ const ConfirmLogout = ({ mutate }: any) => {
 };
 export default function ProfilePage() {
   const navigate = useNavigate();
-  const { data, isLoading, error } = useProfile();
+  const location = useLocation();
+  // const { data, isLoading, error } = useProfile();
   const { mutate } = useLogout();
+  const { name, email, image } = location.state || {};
 
-  if (isLoading)
-    return (
-      <p className="text-red-800 font-semibold align-center text-2xl">
-        Loading...
-      </p>
-    );
-  if (error)
-    return (
-      <p className="text-red-800 font-semibold align-center text-2xl">
-        Error loading items
-      </p>
-    );
-  if (!data)
-    return (
-      <p className="text-red-800 font-semibold align-center text-2xl">
-        No data!
-      </p>
-    );
   function goToEditProfile() {
     navigate("/edit-profile", {
       state: {
-        name: data?.data.user.name,
-        email: data?.data.user.email,
+        name: name,
+        email: email,
         image: HumanImage,
       },
     });
@@ -104,8 +89,8 @@ export default function ProfilePage() {
       <div className="flex items-center gap-5 bg-[#F5F6F7] p-5 rounded-2xl mb-10">
         <img src={HumanImage} alt="img" className="w-30 h-30 rounded-full" />
         <div className="flex flex-col items-start">
-          <h1 className="font-semibold text-2xl">{data.data.user.name}</h1>
-          <p className="text-xl text-[#6D7379]">{data.data.user.email}</p>
+          <h1 className="font-semibold text-2xl">{name}</h1>
+          <p className="text-xl text-[#6D7379]">{email}</p>
         </div>
         <button className="ml-auto" onClick={goToEditProfile}>
           <ArrowForwardIosIcon className="text-[#99A2AB] " fontSize="medium" />

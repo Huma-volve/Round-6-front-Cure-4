@@ -1,5 +1,5 @@
 import { deleteFavoritesDoctors } from "@/api/Favorite";
-import type { FavoriteResponse } from "@/types/ProfileTypes/types";
+import type { FavoriteResponse } from "@/types/favoriteTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useDeleteFavorite() {
@@ -18,10 +18,21 @@ export function useDeleteFavorite() {
       queryClient.setQueryData<FavoriteResponse>(
         ["favorite-doctors"],
         (old) => {
-          if (!old) return { success: true, message: "", data: [] };
+          if (!old)
+            return {
+              success: true,
+              message: "",
+              data: { favorites: [] },
+              errors: null,
+            };
           return {
             ...old,
-            data: old.data.filter((doc) => doc.user_id !== doctorID),
+            data: {
+              ...old.data,
+              favorites: old.data.favorites.filter(
+                (doc) => doc.id !== doctorID
+              ),
+            },
           };
         }
       );
