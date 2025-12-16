@@ -2,17 +2,34 @@ import { useGetBookings } from "@/hooks/Bookings/useGetBookings";
 import BackButton from "@/logicalComponents/BackButton";
 import CalenderBar from "@/logicalComponents/Bookings/CalenderBar";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import DoctorImage from "../../assets/doctor.jpg";
-import { Calendar, PhoneIcon } from "lucide-react";
+import { Calendar, LocationEdit } from "lucide-react";
 import { format } from "date-fns";
 export default function BookingsPage() {
   const navigate = useNavigate();
-
+  const [searchParams, setSearchParams] = useSearchParams();
   const [active, setActive] = useState<
     "all" | "upcomming" | "completed" | "past"
   >("all");
+  function handleUpComming() {
+    setActive("upcomming");
+    searchParams.set("upcoming_only", "true");
+    setSearchParams(searchParams);
+  }
+  function handleCancel() {
+    setActive("past");
+    searchParams.set("status", "canceled");
+    setSearchParams(searchParams);
+  }
+  function handleCompleted() {
+    setActive("completed");
+    searchParams.set("status", "completed");
+    setSearchParams(searchParams);
+  }
+  // const filter = searchParams.toString();
   const { data, isLoading, error } = useGetBookings(active);
+
   if (isLoading)
     return (
       <p className="text-red-800 font-semibold align-center text-2xl">
@@ -50,7 +67,7 @@ export default function BookingsPage() {
           All
         </button>
         <button
-          onClick={() => setActive("upcomming")}
+          onClick={() => handleUpComming()}
           className={` text-xl p-3 ${
             active === "upcomming"
               ? "bg-[#145DB8] text-[#ffffff] rounded-2xl"
@@ -60,7 +77,7 @@ export default function BookingsPage() {
           Upcoming
         </button>
         <button
-          onClick={() => setActive("completed")}
+          onClick={() => handleCompleted()}
           className={` text-xl p-3 ${
             active === "completed"
               ? "bg-[#145DB8] text-[#ffffff] rounded-2xl"
@@ -70,7 +87,7 @@ export default function BookingsPage() {
           Completed
         </button>
         <button
-          onClick={() => setActive("past")}
+          onClick={() => handleCancel()}
           className={` text-xl p-3 ${
             active === "past"
               ? "bg-[#145DB8] text-[#ffffff] rounded-2xl"
@@ -81,14 +98,34 @@ export default function BookingsPage() {
         </button>
         <CalenderBar />
       </div>
-      {data.appointments.length > 0 && (
+      {data?.data?.data?.length > 0 && (
         <div className="mt-10">
-          {data.appointments.map((el) => (
+          {data?.data?.data?.map((el) => (
             <div key={el.id} className="w-90 h-50 p-2 border-2 rounded-2xl">
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center">
                 <Calendar className="w-5 h-5 text-gray-600 " />
-                <p>{format(el.date, "EEEE, MMMM d")}</p>
-                <p className="ml-auto text-[#145DB8] text-lg">{data.filter}</p>
+                <p className="text-gray-600">
+                  {format(el.date_time_formatted, "EEEE, MMMM d")}
+                </p>
+                <p
+                  className={`ml-auto text-lg ${
+                    active === "upcomming"
+                      ? "text-[#145DB8]"
+                      : active === "completed"
+                      ? "text-[#4CAF50]"
+                      : active === "past"
+                      ? "text-[#FC4B4E]"
+                      : ""
+                  }`}
+                >
+                  {active === "upcomming"
+                    ? "Up Comming"
+                    : active === "completed"
+                    ? "Completed"
+                    : active === "past"
+                    ? "Canceled"
+                    : "Pending"}
+                </p>
               </div>
               <hr className="border-1"></hr>
               <div className="p-2 flex gap-2">
@@ -97,12 +134,14 @@ export default function BookingsPage() {
                   alt="doctor-image"
                   className="w-13 h-13 rounded-full"
                 />
-                <div className="flex flex-col gap-1">
-                  <h4 className="text-xl font-semibold">{el.doctor.name}</h4>
-                  <p className="text-[#6D7379]">{el.doctor.email}</p>
+                <div className="flex flex-col ">
+                  <h4 className="text-xl font-semibold">
+                    {el.doctor.user.name}
+                  </h4>
+                  <p className="text-[#6D7379]">{el.doctor.specialty}</p>
                   <div className="flex items-center gap-1">
-                    <PhoneIcon className="text-[#6D7379] w-5 h-5" />
-                    <p className="text-[#6D7379]">{el.doctor.phone}</p>
+                    <LocationEdit className="text-[#6D7379] w-5 h-5" />
+                    <p className="text-[#6D7379]">{el.doctor.clinic_address}</p>
                   </div>
                 </div>
               </div>

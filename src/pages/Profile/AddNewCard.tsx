@@ -6,16 +6,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 export default function AddNewCard() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { card_token } = location.state as { card_token: string };
+  const { brand } = location.state as { brand: string };
   const { mutate } = useAddCard();
   return (
-    <div className="container mx-auto mt-20">
+    <div className="container mx-auto mt-20 px-10">
       <div className="flex gap-10 items-center">
         <BackButton onClick={() => navigate(-1)} />
         <h1 className="text-2xl font-medium">Add New Card</h1>
       </div>
       <div>
-        <AddCardForm card_token={card_token} mutate={mutate} />
+        <AddCardForm brand={brand} mutate={mutate} />
       </div>
     </div>
   );

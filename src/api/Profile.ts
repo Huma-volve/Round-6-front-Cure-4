@@ -10,9 +10,10 @@ import type {
   NewCardResponse,
   PrivacyPolicyResponse,
   ProfileResponse,
-} from "@/types/ProfileTypes/types";
+} from "@/types/profileTypes";
 const baseURL = import.meta.env.VITE_BASE_URL;
-const token = localStorage.getItem("token");
+// const token = localStorage.getItem("token");
+const token = "149|PeKKYSuEB1ht9lH0Cb0CxO29hD5vWvcj2rqhOTz2ca0d60d9";
 export async function privacyContent(): Promise<PrivacyPolicyResponse> {
   try {
     const res = await fetch(`${baseURL}pages/privacy-policy`, {
@@ -76,11 +77,11 @@ export async function editUserProfile(
   try {
     const formData = new FormData();
     formData.append("name", userUpdatedData.name);
-    formData.append("phone", userUpdatedData.phone);
-    formData.append("birthdate", userUpdatedData.birthdate);
-    if (userUpdatedData.avatar)
-      formData.append("avatar", userUpdatedData.avatar);
-    const res = await fetch(`${baseURL}profile`, {
+    formData.append("_method", "PUT");
+    // formData.append("birthdate", userUpdatedData.birthdate);
+    // if (userUpdatedData.avatar)
+    // formData.append("avatar", userUpdatedData.avatar);
+    const res = await fetch(`${baseURL}updateProfile`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -101,7 +102,7 @@ export async function editUserProfile(
 }
 export async function getAllCards(): Promise<AllCardsResponse> {
   try {
-    const res = await fetch(`${baseURL}cards`, {
+    const res = await fetch(`${baseURL}payment-methods`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -124,18 +125,13 @@ export async function addNewCard(
   newCardData: NewCardRequest
 ): Promise<NewCardResponse> {
   try {
-    const formData = new FormData();
-    formData.append("card_token", newCardData.card_token);
-    formData.append("holder_name", newCardData.holder_name);
-    formData.append("exp_month", newCardData.exp_month);
-
-    formData.append("number", newCardData.number);
-    const res = await fetch(`${baseURL}cards`, {
+    const res = await fetch(`${baseURL}payment-methods`, {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: formData,
+      body: JSON.stringify(newCardData),
     });
 
     if (!res.ok) {
@@ -149,16 +145,18 @@ export async function addNewCard(
     throw error instanceof Error ? error : new Error("Unexpected post error");
   }
 }
-export async function deleteCard(cardID: number): Promise<DeleteCardResponse> {
+export async function deleteCard(
+  paymentMethodId: number
+): Promise<DeleteCardResponse> {
   try {
-    const res = await fetch(`${baseURL}cards/${cardID}`, {
+    const res = await fetch(`${baseURL}payment-methods/${paymentMethodId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(cardID);
+    console.log(paymentMethodId);
     if (!res.ok) {
       const error = await res.json();
       throw new Error(error.message || "Delete failed");
@@ -176,6 +174,7 @@ export async function logout(): Promise<LogoutResponse> {
     const res = await fetch(`${baseURL}logout`, {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
@@ -192,16 +191,15 @@ export async function logout(): Promise<LogoutResponse> {
     throw error instanceof Error ? error : new Error("Unexpected Logout error");
   }
 }
-export async function deleteAccount(password: string): Promise<DeleteResponse> {
+export async function deleteAccount(): Promise<DeleteResponse> {
   try {
-    const formData = new FormData();
-    formData.append("password", password);
-    const res = await fetch(`${baseURL}delete_account`, {
-      method: "POST",
+    const res = await fetch(`${baseURL}delete-account`, {
+      method: "DELETE",
       headers: {
+        Accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
         Authorization: `Bearer ${token}`,
       },
-      body: formData,
     });
 
     if (!res.ok) {
